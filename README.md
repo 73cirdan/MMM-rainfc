@@ -27,6 +27,14 @@ text | sets the text to display if no rain is to be expected
 			config: {
 				lat: "52.37",
 				lon: "4,90", 
+				width: 200,
+				height: 150,
+				lineWidth: 2,
+				lineColor: "#e0ffe0",
+				fillColor: "#e0ffe0",
+				maxPower: 300,
+				rainText: "Tot: ",
+				noRainText: "Geen regen tot: "
 			}
 		},
 
