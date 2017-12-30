@@ -34,7 +34,7 @@ noRainText | the text you want to display if no rain is expected untill the last
                 	header: "Rain forecast",
 			config: {
 				lat: "52.37",
-				lon: "4,90", 
+				lon: "4.90", 
 				width: 200,
 				height: 150,
 				lineWidth: 2,
