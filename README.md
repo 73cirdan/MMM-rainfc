@@ -46,7 +46,7 @@ noRainText | the text you want to display if no rain is expected untill the last
 			}
 		},
 ## Dutch Explanation of the Api and Source
-Data is provided by buienradar (https://www.buienradar.nl/overbuienradar/gratis-weerdatahttps://www.buienradar.nl/overbuienradar/gratis-weerdata), permission for non commercial use. Excerpt from the site:
+Data is provided by buienradar (https://www.buienradar.nl/overbuienradar/gratis-weerdata ), permission for non commercial use. Excerpt from the site:
 
 (1.0) Neerslagdata op basis van coördinaten
 
