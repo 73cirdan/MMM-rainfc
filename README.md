@@ -20,18 +20,8 @@ lat | the latitude of your location
 text | sets the text to display if no rain is to be expected
 
 ## Example config.js content for this module
-		{
-			module: "bustimes",
-			position: "top_left",
-                	header: "Bustimes",
-			config: {
-				timepointcode: "20320110,20141200",
-				displaymode: "small",
-				departs: 3 
-			}
-		},
-
-
+		todo	
+		
 ## Dutch Explanation of the Api
 (1.0) Neerslagdata op basis van coördinaten
 
