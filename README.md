@@ -1,4 +1,5 @@
-# bustimes
+# Rainfc
+
 Magic Mirror - Dutch Rain Forecast
 
 Based on a Dutch public api for rain forecast (BuienRadar). 
@@ -15,9 +16,16 @@ The following properties can be configured:
 
 First Header | Second Header
 ------------ | ------------- 
-lon | the longitude of your location
 lat | the latitude of your location
-text | sets the text to display if no rain is to be expected
+lon | the longitude of your location
+width | controls the size of the module
+height | controls the size of the module
+lineWidth | the thicknes of the line
+lineColor | the color of the line
+fillColor | the color of the area under the line
+maxPower | the maximum number on the y axis
+rainText | The text you want to display in front of the last time received in the last call
+noRainText | the text you want to display if no rain is expected untill the last time in the last call.
 
 ## Example config.js content for this module
 		{
@@ -37,19 +45,6 @@ text | sets the text to display if no rain is to be expected
 				noRainText: "Geen regen tot: "
 			}
 		},
-
-{
-lat: "52.37",                                 
-lon: "4.90",                                 
-width: 200,                                 
-height: 150,                                 
-lineWidth: 2,                                 
-lineColor: "#e0ffe0",                                 
-fillColor: "#e0ffe0",                                 
-maxPower: 300,                                 
-rainText: "Tot: ",                                 
-noRainText: "Geen regen tot: "                         
-},
 ## Dutch Explanation of the Api
 (1.0) Neerslagdata op basis van coördinaten
 
