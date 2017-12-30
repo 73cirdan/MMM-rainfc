@@ -20,6 +20,10 @@ lat | the latitude of your location
 text | sets the text to display if no rain is to be expected
 
 ## Example config.js content for this module
+tt
+tt
+tt
+
 {
 module: "rainfc",
 position: "top_right",
