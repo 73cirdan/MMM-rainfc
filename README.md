@@ -20,6 +20,14 @@ lat | the latitude of your location
 text | sets the text to display if no rain is to be expected
 
 ## Example config.js content for this module
+		{
+			module: "bustimes",
+			position: "top_left",
+                	header: "Bustimes",
+			config: {
+				displaymode: "small",
+				departs: 3 
+		},
 tt
 tt
 tt
