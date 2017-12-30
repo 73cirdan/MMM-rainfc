@@ -20,7 +20,7 @@ lat | the latitude of your location
 text | sets the text to display if no rain is to be expected
 
 ## Example config.js content for this module
-   {                         
+  ' {                         
    	module: "rainfc",
 	position: "top_right",
 	header: "Rain forecast next 2 hours",
@@ -36,7 +36,7 @@ text | sets the text to display if no rain is to be expected
 		rainText: "Tot: ",                                 
 		noRainText: "Geen regen tot: "                         
 		}                 
-	},
+	},'
 ## Dutch Explanation of the Api
 (1.0) Neerslagdata op basis van coördinaten
 
