@@ -45,7 +45,9 @@ noRainText | the text you want to display if no rain is expected untill the last
 				noRainText: "Geen regen tot: "
 			}
 		},
-## Dutch Explanation of the Api
+## Dutch Explanation of the Api and Source
+Data is provided by buienradar (https://www.buienradar.nl/overbuienradar/gratis-weerdatahttps://www.buienradar.nl/overbuienradar/gratis-weerdata), permission for non commercial use. Excerpt from the site:
+
 (1.0) Neerslagdata op basis van coördinaten
 
 Op basis van de door u gewenste coördinaten (latitude en longitude) kunt u de neerslag tot twee uur vooruit ophalen in tekstvorm. De data wordt iedere 5 minuten geüpdatet. Op deze pagina kunt u de neerslag in tekst vinden. De waarde 0 geeft geen neerslag aan (droog), de waarde 255 geeft zware neerslag aan. Gebruik de volgende formule voor het omrekenen naar de neerslagintensiteit in de eenheid millimeter per uur (mm/u):
