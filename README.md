@@ -21,22 +21,16 @@ text | sets the text to display if no rain is to be expected
 
 ## Example config.js content for this module
 		{
-			module: "bustimes",
-			position: "top_left",
-                	header: "Bustimes",
+			module: "rainfc",
+			position: "top_right",
+                	header: "Rain forecast",
 			config: {
-				displaymode: "small",
-				departs: 3 
+				lat: "52.37",
+				lon: "4,90", 
+			}
 		},
-tt
-tt
-tt
 
 {
-module: "rainfc",
-position: "top_right",
-header: "Rain forecast next 2 hours",
-config: {                                 
 lat: "52.37",                                 
 lon: "4.90",                                 
 width: 200,                                 
@@ -47,7 +41,6 @@ fillColor: "#e0ffe0",                             �
 maxPower: 300,                                 
 rainText: "Tot: ",                                 
 noRainText: "Geen regen tot: "                         
-}                 
 },
 ## Dutch Explanation of the Api
 (1.0) Neerslagdata op basis van coördinaten
