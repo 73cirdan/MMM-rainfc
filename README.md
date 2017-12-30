@@ -2,7 +2,8 @@
 Magic Mirror - Dutch Rain Forecast
 
 Based on a Dutch public api for rain forecast (BuienRadar). 
-![call](https://github.com/73cirdan/MMM-rainfc/blob/master/screenshot.png)
+![call](https://github.com/73cirdan/MMM-rainfc/blob/master/screenshot2.png)
+
 # Installation
 Navigate into your MagicMirror's `modules` folder and execute
  'git clone https://github.com/73cirdan/MMM-rainfc rainfc'
