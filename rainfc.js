@@ -68,20 +68,42 @@ Module.register("rainfc",{
 		var wrapper = document.createElement("table");
 		wrapper.align = "center";
 		wrapper.style.cssText = "width: " + this.config.width + "px";
-		var currentRow = document.createElement("tr");
-		var textrow = document.createElement("td");
-		textrow.className = "small thin light";
-		textrow.id = "textrow";
-		currentRow.appendChild(textrow);
-		wrapper.appendChild(currentRow);
+		var max = this.config.nrOfTimeLabels ? this.config.nrOfTimeLabels : 0;
+
+		if (max==0) {
+			var currentRow = document.createElement("tr");
+			var textrow = document.createElement("td");
+			textrow.className = "xsmall thin light";
+			textrow.setAttribute("colspan", max)
+			textrow.id = "textrow";
+			currentRow.appendChild(textrow);
+			wrapper.appendChild(currentRow);
+		}
 
 		var graphRow = document.createElement("tr");
 		var graph = document.createElement("td");
 		graph.id = "sparkline";
+		graph.setAttribute("colspan", max)
 		graph.className = "small thin light";
 		graph.innerHTML = "No Data";
 		graphRow.appendChild(graph);
 		wrapper.appendChild(graphRow);
+
+		if (max>0) {
+			var botRow = document.createElement("tr");
+			for (i = 0; i < max; i++) {
+				var labelrow = document.createElement("td");
+				labelrow.className = "xsmall thin light";
+				labelrow.id = "labelrow"+i;
+				
+				if (i==0) { labelrow.setAttribute("align","left"); }
+				else if (i+1==max) { labelrow.setAttribute("align","right"); }
+				else { labelrow.setAttribute("align","center"); }
+				
+				botRow.appendChild(labelrow);
+			}
+			wrapper.appendChild(botRow);
+		}
 
 		return wrapper;
 	},
@@ -134,12 +156,22 @@ Module.register("rainfc",{
 		}
 		else if (notification === "DATA") {
 			this.processRainfc(payload);
+			var max = this.config.nrOfTimeLabels ? this.config.nrOfTimeLabels : 0;
 
 			if (this.rain == 0) {
-				noRainText = this.config.noRainText ? this.config.noRainText : "No rain untill: ";
 				// if no rain expected, hide the graph
-				$("#textrow").html( noRainText + this.times[this.times.length-1]);
 				$("#sparkline").html("");
+				
+				noRainText = this.config.noRainText ? this.config.noRainText : "No rain untill: ";
+				if (max>0) {
+					$("#textrow").html("");
+					$("#labelrow"+(max-1)).html( noRainText + this.times[this.times.length-1]);
+				} else {
+					$("#textrow").html( noRainText + this.times[this.times.length-1]);
+					for (i = 0; i < max; i++) {
+						$("#labelrow"+i).html("");
+					}
+				}
 			} else {
 				$("#sparkline").sparkline(
 					this.rains, {
@@ -156,9 +188,18 @@ Module.register("rainfc",{
 						chartRangeMax: this.config.maxPower,
 					});
 				
-				rainText = this.config.rainText ? this.config.rainText : "Forecast untill: ";
-				// show line for how long the rain forecast lasts
-				$("#textrow").html(rainText + this.times[this.times.length-1]);
+				// show line for how long the rain forecast lasts or the labels beneath the graph
+				if (max>0) {
+					interval = Math.floor(this.times.length / (max-1));
+					for (i = 0; i < max; i++) {
+						if (i==0) { $("#labelrow0").html( this.times[0]); }
+						else if (i+1==max) { $("#labelrow"+i).html( this.times[this.times.length-1]); }
+						else { $("#labelrow"+i).html( this.times[i*interval]); }
+					}
+				} else {
+					rainText = this.config.rainText ? this.config.rainText : "Forecast untill: ";
+					$("#textrow").html(rainText + this.times[this.times.length-1]);
+				}
 			}
 		}
 	} 	
