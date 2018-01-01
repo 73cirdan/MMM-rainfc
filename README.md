@@ -26,7 +26,7 @@ fillColor | the color of the area under the line
 maxPower | the maximum number on the y axis
 rainText | The text you want to display in front of the last time received in the last call
 noRainText | the text you want to display if no rain is expected untill the last time in the last call.
-nrOfTimeLabels | optional value, adds a number of time lables under the graph, advised values: 2-5. If non existant or 0 reverts to default behaviour.
+nrOfTimeLabels | optional value, adds a number of time labels under the graph, advised values: 2-5. If non existant or 0 reverts to default behaviour.
 
 ## Example config.js content for this module
 		{
