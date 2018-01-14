@@ -73,7 +73,7 @@ Module.register("rainfc",{
 		if (max==0) {
 			var currentRow = document.createElement("tr");
 			var textrow = document.createElement("td");
-			textrow.className = "xsmall thin light";
+			textrow.className = "small";
 			textrow.setAttribute("colspan", max)
 			textrow.id = "textrow";
 			currentRow.appendChild(textrow);
@@ -156,7 +156,19 @@ Module.register("rainfc",{
 		}
 		else if (notification === "DATA") {
 			this.processRainfc(payload);
+			
 			var max = this.config.nrOfTimeLabels ? this.config.nrOfTimeLabels : 0;
+			
+			if (!this.times || this.times.length == 0) {
+				$("#sparkline").html("No Data");
+				$("#textrow").html("");
+				for (i = 0; i < max; i++) {
+					$("#labelrow"+i).html("");
+				}
+	
+				return;
+			}
+
 
 			if (this.rain == 0) {
 				// if no rain expected, hide the graph
@@ -166,6 +178,9 @@ Module.register("rainfc",{
 				if (max>0) {
 					$("#textrow").html("");
 					$("#labelrow"+(max-1)).html( noRainText + this.times[this.times.length-1]);
+					for (i = 0; i < max-1; i++) {
+						$("#labelrow"+i).html("");
+					}
 				} else {
 					$("#textrow").html( noRainText + this.times[this.times.length-1]);
 					for (i = 0; i < max; i++) {
