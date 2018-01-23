@@ -7,7 +7,7 @@
  * By Cirdan.
  */
 
-Module.register("rainfc",{
+Module.register("MMM-rainfc",{
 
 	// Default module config.
 	defaults: {
