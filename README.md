@@ -7,7 +7,7 @@ Based on a Dutch public api for rain forecast (BuienRadar).
 
 # Installation
 Navigate into your MagicMirror's `modules` folder and execute
- 'git clone https://github.com/73cirdan/MMM-rainfc rainfc'
+ 'git clone https://github.com/73cirdan/MMM-rainfc'
 # Using the module
 This module can show the rainforecast in your neighbourhood using longitude and latitude.
 
