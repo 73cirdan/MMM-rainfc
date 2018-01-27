@@ -30,7 +30,7 @@ nrOfTimeLabels | optional value, adds a number of time labels under the graph, a
 
 ## Example config.js content for this module
 		{
-			module: "rainfc",
+			module: "MMM-rainfc",
 			position: "top_right",
                 	header: "Rain forecast",
 			config: {
