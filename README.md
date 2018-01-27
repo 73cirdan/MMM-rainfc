@@ -1,4 +1,4 @@
-# Rainfc
+# MMM-Rainfc
 
 Magic Mirror - Dutch Rain Forecast
 
