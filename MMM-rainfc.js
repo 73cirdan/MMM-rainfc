@@ -17,8 +17,7 @@ Module.register("MMM-rainfc",{
 
 		initialLoadDelay: 0, // 0 seconds delay
 
-		// https://br-gpsgadget-new.azurewebsites.net/data/raintext?lat=51&lon=3
-		apiBase: "https://br-gpsgadget-new.azurewebsites.net",
+		apiBase: "https://gpsgadget.buienradar.nl",
 		rainfcEndpoint: "data/raintext",
 
 		refreshInterval: 1000 * 60, //refresh every minute
@@ -139,10 +138,10 @@ Module.register("MMM-rainfc",{
 			//Log.info(self.name + ": parse rain forecast:" + Math.pow(10, (parseInt(r)-109)/32) );
 			
 			this.rain = this.rain + parseInt(r); // if no rain expected dont show graph
-			this.rains.push( parseInt(r)); // a value between 0-255
+			//this.rains.push( parseInt(r)); // a value between 0-255
 			//Alternative for the 0-255 values
 			//Neerslagintensiteit = 10^((waarde-109)/32), rain forecast in mm/hr
-			//this.rains.push( Math.pow(10, (parseInt(r)-109)/32));
+			this.rains.push( Math.pow(10, (parseInt(r)-109)/32));
 			this.times.push( t );
 		}
 
@@ -188,6 +187,7 @@ Module.register("MMM-rainfc",{
 					}
 				}
 			} else {
+
 				$("#sparkline").sparkline(
 					this.rains, {
 						type: 'line',
