@@ -2,8 +2,6 @@
 
 Magic Mirror - Dutch Rain Forecast
 
-the story continues at https://github.com/SpoturDeal/MMM-rain-forecast
-
 Based on a Dutch public api for rain forecast (BuienRadar). 
 ![call](https://github.com/73cirdan/MMM-rainfc/blob/master/screenshot2.png)
 
