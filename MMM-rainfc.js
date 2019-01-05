@@ -30,6 +30,7 @@ Module.register("MMM-rainfc",{
 		fillColor: "#e0ffeo",
 
 		maxPower: 300,
+		oldData	: true,
 	},
 
 	// Define required scripts.
@@ -120,14 +121,29 @@ Module.register("MMM-rainfc",{
 			Log.error(self.name + ": Could not parse rain forecast, will retry");
 			return;
 		}
+		var lines = data.split("\n");
+		var numLines = lines.length-1; // always a empty line at the end
+
+		// This part to counter the unexected rain forecasts buienradar sends since nov 2018
+		// if the first value is not in a timewindow  currenttime +/- 15 minutes, ignore the update
+		// using old data is better than no data ;-)
+		oldData	= true;
+		var startTime   = moment().subtract(15, 'minutes');
+		var endTime     = moment().add(15, 'minutes');
+		var firstBrTime = lines[0].substring(lines[0].indexOf('|')+1 , lines[0].length);
+		var compareTime = moment(firstBrTime, "HH:mm");
+		if (!compareTime.isBetween(startTime, endTime)) {
+			Log.info(self.name + ": unexpected rain forecast:" + 
+				compareTime.format('HH:mm') +  " rain at " + moment().format('HH:mm'));
+			return;
+		}
+		oldData = false; //used to add an * in the displayed time to indicate old data
+		
 		
 		this.rain = 0; 
 		this.rains = []; 
 		this.times = []; 
 		
-		var lines = data.split("\n");
-		var numLines = lines.length-1; // always a empty line at the end
-
 		// parse phrases
 		for (i = 0; i < numLines; i++) {
   			var line = lines[i];
@@ -174,14 +190,17 @@ Module.register("MMM-rainfc",{
 				$("#sparkline").html("");
 				
 				noRainText = this.config.noRainText ? this.config.noRainText : "No rain untill: ";
+				noRainText = noRainText + this.times[this.times.length-1] ;
+				noRainText = noRainText + (oldData?"*":"");
+						
 				if (max>0) {
 					$("#textrow").html("");
-					$("#labelrow"+(max-1)).html( noRainText + this.times[this.times.length-1]);
+					$("#labelrow"+(max-1)).html( noRainText);
 					for (i = 0; i < max-1; i++) {
 						$("#labelrow"+i).html("");
 					}
 				} else {
-					$("#textrow").html( noRainText + this.times[this.times.length-1]);
+					$("#textrow").html(noRainText);
 					for (i = 0; i < max; i++) {
 						$("#labelrow"+i).html("");
 					}
@@ -207,13 +226,13 @@ Module.register("MMM-rainfc",{
 				if (max>0) {
 					interval = Math.floor(this.times.length / (max-1));
 					for (i = 0; i < max; i++) {
-						if (i==0) { $("#labelrow0").html( this.times[0]); }
+						if (i==0) { $("#labelrow0").html( this.times[0]+(oldData?"*":"")); }
 						else if (i+1==max) { $("#labelrow"+i).html( this.times[this.times.length-1]); }
 						else { $("#labelrow"+i).html( this.times[i*interval]); }
 					}
 				} else {
 					rainText = this.config.rainText ? this.config.rainText : "Forecast untill: ";
-					$("#textrow").html(rainText + this.times[this.times.length-1]);
+					$("#textrow").html(rainText + this.times[this.times.length-1]+(oldData?"*":""));
 				}
 			}
 		}
