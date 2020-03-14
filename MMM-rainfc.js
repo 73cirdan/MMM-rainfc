@@ -14,11 +14,10 @@ Module.register("MMM-rainfc",{
 		lang: config.language,
 		apiBase: "https://gpsgadget.buienradar.nl",
 		rainfcEndpoint: "data/raintext",
-		lat: 52,
-		lon: 5,
+		lat: 52.0,
+		lon: 5.0,
 		css: "MMM-rainfc.css",
-		refreshInterval: 1000 * 60, //refresh every minute
-		pleaseWait: "Please wait.",
+		refreshInterval: 1000 * 60 * 15, //refresh every 15 minutes
 		autohide: true,
 	},
 
@@ -29,7 +28,10 @@ Module.register("MMM-rainfc",{
 
 	// Define required translations.
 	getTranslations: function() {
-		return false;
+       		return {
+            		en: "translations/en.json",
+            		nl: "translations/nl.json",
+        	};
 	},
 
 	// Define start sequence.
@@ -37,7 +39,7 @@ Module.register("MMM-rainfc",{
 		Log.info("Starting module: " + this.name);
 
 		// Set locale.
-		moment.locale(config.language);
+		//moment.locale(config.language);
 
 		this.sendSocketNotification('CONFIG', this.config);
 
@@ -48,7 +50,8 @@ Module.register("MMM-rainfc",{
                 var wrapper = document.createElement("div");
                 wrapper.align = "center";
     		wrapper.id = "sparkler";
-                wrapper.className = "small thin light";
+		wrapper.innerHTML = this.translate("STARTING");
+                wrapper.className = "small dimmed light rfc_text";
                 return wrapper;
         },
 
@@ -98,7 +101,7 @@ Module.register("MMM-rainfc",{
         	svg+='<text x="280" y="115" >' + times[raining.length-1] + '</text>';
         	svg+='</g></svg>';
 
-		Log.error(self.name + ": svg:" + svg);
+		//Log.info(self.name + ": svg:" + svg);
         	return svg;
     	},
 
@@ -126,7 +129,7 @@ Module.register("MMM-rainfc",{
 			this.rain = this.rain + parseInt(r); // if no rain expected dont show graph
 			this.rains.push( r=="NaN"?0:parseInt(parseInt(r)/2.55));
 			this.times.push( t );
-			Log.error(self.name + ": parse rain forecast:" + r +  " rain at " + t + " total forecast:" + this.rain);
+			//Log.info(self.name + ": parse rain forecast:" + r +  " rain at " + t + " total forecast:" + this.rain);
 		}
 	},
 
@@ -136,43 +139,40 @@ Module.register("MMM-rainfc",{
 
 		// configured succesfully
     		if (notification === "STARTED") {
-			//$("#sparkler").html("Configured");
-			Log.error(self.name + ": geb: " + document.getElementById('sparkler'));
-			Log.error(self.name + ": rain forecast configured");
-			spark.innerHTML = "Configured";
-			//this.updateDom();
+			Log.info(self.name + ": rain forecast configured");
+			spark.innerHTML = this.translate("STARTED");
 			return;
 		}
        		// error received from node_helper.js
        		if (notification === "ERROR") {
 			Log.error(self.name + ": rain forecast error: " + payload);
-			spark.innerHTML = payload;
+			spark.innerHTML = this.translate("ERROR");
        	   		return;
        		}
        		if (notification === "DATA") {
        			// no data received from node_helper.js
 			if (!payload || payload ==="") {
-				error = "No data received, will retry";
-				Log.error(self.name + ": " + error);
-				spark.innerHTML = error;
+				nodata = this.translate("NODATA");
+				Log.warn(self.name + ": " + nodata);
+				spark.innerHTML = nodata;
 				return;
 			}
 			this.processRainfc(payload);
-       	 		// no rain calculated from in node_helper.js
+       	 		// no rain calculated from procesRainfc
        	 		if (this.rain == 0) {
-				Log.error(self.name + ": rain forecast no error");
-				noRainText = this.config.noRainText ?
-					     this.config.noRainText : 
-					     "No rain untill: ";
-				noRainText += this.times[this.times.length-1] ;
+				Log.info(self.name + ": no rain expected");
+				noRainText = this.translate("NORAIN")
+					   + this.times[this.times.length-1] ;
 				spark.innerHTML = noRainText;
 
-				// experimental: option to completly hide the module if no rain is expected
+				// experimental: option to completly hide 
+				// the module if no rain is expected
 				if (this.config.autohide) this.hide();
        	 		} else {
-				Log.error(self.name + ": rain forecast drawing");
+				Log.info(self.name + ": rain expected");
 				spark.innerHTML = this.makeSVG(this.rains,this.times);
-				// experimental: option to completly hide the module if no rain is expected:
+				// experimental: option to completly hide
+				// the module if no rain is expected:
 				// show it again  when an update comes in with rain
 				if (this.config.autohide) this.show();
 			}
