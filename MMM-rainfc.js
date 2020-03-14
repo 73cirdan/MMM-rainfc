@@ -1,7 +1,7 @@
 /* global Module */
 
 /* Magic Mirror
- * Module: rainfc
+ * Module: MMM-rainfc
  * Displays a graph of expected rain for a lon/lat pair based on a Dutch public Api (Buienradar)
  *
  * By Cirdan.
@@ -11,14 +11,13 @@ Module.register("MMM-rainfc",{
 
 	// Default module config.
 	defaults: {
-		lang: config.language,
 		apiBase: "https://gpsgadget.buienradar.nl",
 		rainfcEndpoint: "data/raintext",
 		lat: 52.0,
 		lon: 5.0,
 		css: "MMM-rainfc.css",
 		refreshInterval: 1000 * 60 * 15, //refresh every 15 minutes
-		autohide: true,
+		autohide: false,
 	},
 
 	// Define required scripts.
@@ -38,13 +37,11 @@ Module.register("MMM-rainfc",{
 	start: function() {
 		Log.info("Starting module: " + this.name);
 		this.sendSocketNotification('CONFIG', this.config);
-
 	},
 
  	// Override dom generator.
         getDom: function() {
                 var wrapper = document.createElement("div");
-                wrapper.align = "center";
     		wrapper.id = "sparkler";
 		wrapper.innerHTML = this.translate("STARTING");
                 wrapper.className = "small dimmed light rfc_text";
@@ -53,16 +50,12 @@ Module.register("MMM-rainfc",{
 
     	// Make the graphic using SVG
     	makeSVG: function(raining,times){
-        	/* We start at position
-         	 * The table is upside down therefor we calculate the line position down from the top of the canvas
-         	 * received value 77 = 100 - 77 = 23 on the canvas
-         	 * M01,100 is the start
+         	/* The table is upside down therefor we calculate the line position down from the top of the canvas
+         	 * received value 77 = 100 - 77 = 23 on the canvas, M01,100 is the start
          	 */
-        	var setPoints='M01 100 S ';
+        	var setPoints='M1,100 S ';
         	// loop through the received data array raining[] normally 24 position 0 to 23
-        	//var xAs=1;
         	for (i=0,xAs=1;i<raining.length;i++,xAs+=13){
-            		//xAs = (xAs==1?xAs=2:xAs+13);
             		setPoints +=  xAs + ',' + (100-raining[i]) + ' ';
         	}
         	// End of the line, make sure it drops to the bottom of the canvas to avoid silly fill
@@ -72,7 +65,7 @@ Module.register("MMM-rainfc",{
 
 		// smooth line will possibly draw below the y axis, clip everyting below the y axis
 		svg+='<defs> <clipPath id="cut-off-bottom"> <rect x="0" y="0" width="300" height="100" /> </clipPath> </defs>';
-        	//Set grid lines xAs ans yAs size is determined in CSS
+        	//Set grid lines xAs and yAs size is determined in CSS
         	svg+='<g class="grid x-grid" id="xGrid"><line x1="1" x2="1" y1="00" y2="100"></line></g>';
         	svg+='<g class="grid y-grid" id="yGrid"><line x1="1" x2="300" y1="100" y2="100"></line></g>';
         	
@@ -88,12 +81,12 @@ Module.register("MMM-rainfc",{
         	svg+='<g class="labels x-labels">';
         	svg+='<text x="20"  y="115" >' + times[0]  + '</text>';
         	svg+='<text x="85"  y="115" >' + times[5]  + '</text>';
-        	svg+='<text x="150" y="115" >' + times[11]+ '</text>';
+        	svg+='<text x="150" y="115" >' + times[11] + '</text>';
         	svg+='<text x="215" y="115" >' + times[17] + '</text>';
         	svg+='<text x="280" y="115" >' + times[raining.length-1] + '</text>';
         	svg+='</g></svg>';
 
-		//Log.info(self.name + ": svg:" + svg);
+		Log.error(self.name + ": svg:" + svg);
         	return svg;
     	},
 
@@ -125,6 +118,12 @@ Module.register("MMM-rainfc",{
 		}
 	},
 
+	/* socketNotificationReceive(notification)
+	 * used to get communication from the nodehelper
+	 *
+	 * argument notification object - status label from nodehelper.
+	 * argument payload object - Weather information received via buienradar.nl.
+	 */
        	socketNotificationReceived: function(notification, payload) {
 
 		spark = document.getElementById('sparkler');
@@ -157,14 +156,12 @@ Module.register("MMM-rainfc",{
 					   + this.times[this.times.length-1] ;
 				spark.innerHTML = noRainText;
 
-				// experimental: option to completly hide 
-				// the module if no rain is expected
+				// experimental: option to completly hide the module if no rain is expected
 				if (this.config.autohide) this.hide();
        	 		} else {
 				Log.info(self.name + ": rain expected");
 				spark.innerHTML = this.makeSVG(this.rains,this.times);
-				// experimental: option to completly hide
-				// the module if no rain is expected:
+				// experimental: option to completly hide the module if no rain is expected:
 				// show it again  when an update comes in with rain
 				if (this.config.autohide) this.show();
 			}
