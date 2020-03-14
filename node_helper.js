@@ -34,7 +34,7 @@ module.exports = NodeHelper.create({
 		}, function (error, response, body) {
         		// This is test data just to see the graph if there is no rain
         		//body= "077|10:05\n034|10:10\n101|10:15\n087|10:20\n"+
-				"077|10:25\n240|10:30\n000|10:35\n000|10:40\n"+
+				"077|10:25\n220|10:30\n000|10:35\n000|10:40\n"+
 				"077|10:45\n087|10:50\n087|10:55\n077|11:00\n"+
 				"077|11:05\n034|11:10\n017|11:15\n000|11:20\n"+
 				"000|11:25\n000|11:30\n000|11:35\n000|11:40\n"+

@@ -13,8 +13,8 @@
 }
 
 .MMM-rainfc svg.graph .grid {
-  stroke: white;
-  stroke-dasharray: 1 2;
+  stroke: #e0ffe0;
+  //stroke-dasharray: 1 2;
   stroke-width: 1;
 }
 

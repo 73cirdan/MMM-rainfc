@@ -2,7 +2,7 @@
 
 /* Magic Mirror
  * Module: rainfc
- * Displays a sparkline graph of expected rain for a lon/lat pair based on a Dutch public Api (Buienradar)
+ * Displays a graph of expected rain for a lon/lat pair based on a Dutch public Api (Buienradar)
  *
  * By Cirdan.
  */
@@ -37,10 +37,6 @@ Module.register("MMM-rainfc",{
 	// Define start sequence.
 	start: function() {
 		Log.info("Starting module: " + this.name);
-
-		// Set locale.
-		//moment.locale(config.language);
-
 		this.sendSocketNotification('CONFIG', this.config);
 
 	},
@@ -59,21 +55,18 @@ Module.register("MMM-rainfc",{
     	makeSVG: function(raining,times){
         	/* We start at position
          	 * The table is upside down therefor we calculate the line position down from the top of the canvas
-         	 * received value 77 = 100 - 38 = 72 on the canvas
-         	 * M01,200 is the start
+         	 * received value 77 = 100 - 77 = 23 on the canvas
+         	 * M01,100 is the start
          	 */
-        	//var setPoints='M01,100';
         	var setPoints='M01 100 S ';
         	// loop through the received data array raining[] normally 24 position 0 to 23
-        	var xAs=1;
-        	for (i=0;i<raining.length;i++){
-            		xAs = (xAs==1?xAs=2:xAs+13);
-            		//setPoints += ', L' + xAs + ',' + (100-raining[i]);
+        	//var xAs=1;
+        	for (i=0,xAs=1;i<raining.length;i++,xAs+=13){
+            		//xAs = (xAs==1?xAs=2:xAs+13);
             		setPoints +=  xAs + ',' + (100-raining[i]) + ' ';
         	}
         	// End of the line, make sure it drops to the bottom of the canvas to avoid silly fill
         	setPoints +='L300,100 Z';
-        	//setPoints +=', L' + xAs + ',100 Z';
         	
 		var svg='<svg class="graph" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">';
 
@@ -85,7 +78,6 @@ Module.register("MMM-rainfc",{
         	
 		//Draw the line with the data
         	svg+='<g class="surfaces">';
-        	//svg+='<path class="first_set" style="fill:' + this.config.fillColor + '" d="' + setPoints + '" clip-path="url(#cut-off-bottom)"></path>';
         	svg+='<path class="first_set" d="' + setPoints + '" clip-path="url(#cut-off-bottom)"></path>';
         	svg+='</g>';
         	
