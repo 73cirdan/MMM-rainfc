@@ -11,22 +11,41 @@ Navigate into your MagicMirror's `modules` folder and execute
 # Using the module
 This module can show the rainforecast in your neighbourhood using longitude and latitude.
 
+# Version
+second version inspired by the svg work of spoturdeal with the SVG graph did a rewrite
+	- module no longer depedended on external scripts
+	- deprecated of lot of config options, added a configurable css option, to enable all your custimization needs
+	- improved error handling
+	- refactoring code
+	- support for multiligual use
+	- experimental support for autohide; the hides the module completely when no rain is expected
+first version was baded on jquery and sparkline
+ 
+
 ## Config options
 The following properties can be configured:
 
-First Header | Second Header
------------- | ------------- 
-lat | the latitude of your location
-lon | the longitude of your location
-width | controls the size of the module
-height | controls the size of the module
-lineWidth | the thicknes of the line
-lineColor | the color of the line
-fillColor | the color of the area under the line
-maxPower | the maximum number on the y axis
-rainText | The text you want to display in front of the last time received in the last call
-noRainText | the text you want to display if no rain is expected untill the last time in the last call.
-nrOfTimeLabels | optional value, adds a number of time labels under the graph, advised values: 2-5. If non existant or 0 reverts to default behaviour.
+|Option|Description|
+|---|---|
+|`lat`|The latitude of your position.<br>**Type:** `Float`<br>**Default:** <i>52.15</i>|
+|`lon`|The longitude of your position.<br>**Type:** `Float`<br>**Default:** <i>5.5</i>|
+|`css`| The file to use when channing the look (font, color) of the module<br>**Type:** `string`<br>**Default:** <i>MMM-rainfc.css</i>
+|`pleaseWait`| The text while waiting for data.. <br>**Type:** `string`<br>**Default:** <i>Please wait</i>
+|`noRainText` | the text you want to display if no rain is expected untill the last time in the last call.
+|`refreshInterval`| Time to wait for refresh <br>**Type:** `number`<br>**Default:** <i>15</i><br>**Remark:** Time to download new data in minutes
+|`autohide`| [expiremental] Completely hide the module (including header) when no rain is expected <br>**Type:** `boolean`<br>**Default:** <i>false</i>
+
+Deprecated, no longer needed, see css file for tunning or make your own custom css to prevent overwrite during pull
+|Option|Description|
+|---|---|
+|`width` | controls the size of the module
+|`height` | controls the size of the module
+|`lineWidth` | the thicknes of the line
+|`lineColor` | the color of the line
+|`fillColor` | the color of the area under the line
+|`maxPower` | the maximum number on the y axis
+|`rainText` | The text you want to display in front of the last time received in the last call
+| `nrOfTimeLabels` | optional value, adds a number of time labels under the graph, advised values: 2-5. If non existant or 0 reverts to default behaviour.
 
 ## Example config.js content for this module
 		{
@@ -36,15 +55,7 @@ nrOfTimeLabels | optional value, adds a number of time labels under the graph, a
 			config: {
 				lat: "52.37",
 				lon: "4.90", 
-				width: 200,
-				height: 150,
-				lineWidth: 2,
-				lineColor: "#e0ffe0",
-				fillColor: "#e0ffe0",
-				maxPower: 300,
-				rainText: "Tot: ",
 				noRainText: "Geen regen tot: ",
-				nrOfTimeLabels: 5 // advised values: 2-5
 			}
 		},
 ## Dutch Explanation of the Api and Source
