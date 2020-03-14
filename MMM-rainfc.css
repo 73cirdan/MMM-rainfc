@@ -1,7 +1,42 @@
-.rfc_textrow {
-	//color: #FFFFFF;
+.MMM-rainfc svg.graph {
+    filter: brightness(100%);
+    height: 120px;
+    width: 305px;
 }
-.rfc_labelrow {
-	//color: #0000FF;
-	//font-size: large;
+
+.MMM-rainfc svg.graph .grid {
+  stroke: white;
+  stroke-dasharray: 1 2;
+  stroke-width: 1;
+}
+
+.MMM-rainfc svg.graph .points {
+  stroke: white;
+  stroke-width: 3;
+}
+.MMM-rainfc svg.graph .first_set {
+  fill: #e0ffe0;
+}
+
+.MMM-rainfc svg.graph .surfaces {
+  fill-opacity: 1;
+}
+
+.MMM-rainfc svg.graph .grid.double {
+  stroke-opacity: 1;
+}
+
+.MMM-rainfc svg.graph .labels {
+  font-family: Arial;
+  font-size: 14px;
+  kerning: 1;
+}
+
+.MMM-rainfc svg.graph .labels.x-labels {
+  text-anchor: middle;
+  fill: #e0ffe0;
+}
+
+.MMM-rainfc svg.graph .labels.y-labels {
+  text-anchor: end;
 }
