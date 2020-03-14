@@ -1,10 +1,9 @@
 .MMM-rainfc .rfc_text {
-	//color: #000fe0;
+    	filter: brightness(50%);
 	color: #e0ffe0;
-    //height: 120px;
-    text-anchor: top;
-    text-align: right;
-    //width: 305px;
+    	text-anchor: top;
+    	text-align: right;
+    	height: 20px;
 }
 
 .MMM-rainfc svg.graph {
