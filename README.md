@@ -24,13 +24,11 @@ The following properties can be configured:
 
 |Option|Description|
 |---|---|
-|`lat`|The latitude of your position.<br>**Type:** `Float`<br>**Default:** <i>52.15</i>|
-|`lon`|The longitude of your position.<br>**Type:** `Float`<br>**Default:** <i>5.5</i>|
-|`css`| The file to use when channing the look (font, color) of the module<br>**Type:** `string`<br>**Default:** <i>MMM-rainfc.css</i>
-|`pleaseWait`| The text while waiting for data.. <br>**Type:** `string`<br>**Default:** <i>Please wait</i>
-|`noRainText` | the text you want to display if no rain is expected untill the last time in the last call.
-|`refreshInterval`| Time to wait for refresh <br>**Type:** `number`<br>**Default:** <i>15</i><br>**Remark:** Time to download new data in minutes
-|`autohide`| [expiremental] Completely hide the module (including header) when no rain is expected <br>**Type:** `boolean`<br>**Default:** <i>false</i>
+|`lat`| The latitude of your position.<br>**Type:** `Float`<br>**Default:** <i>52.0</i>|
+|`lon`| The longitude of your position.<br>**Type:** `Float`<br>**Default:** <i>5.0</i>|
+|`css`| (optional) The file to use when channing the look (alignment, font, color) of the module<br>**Type:** `string`<br>**Default:** <i>MMM-rainfc.css</i>
+|`refreshInterval`| (optional) Time to wait for refresh <br>**Type:** `number`<br>**Default:** <i>900000</i><br>**Remark:** Time to download new data in milisecond (15*60*1000)
+|`autohide`| (expiremental) Completely hide the module (including header) when no rain is expected <br>**Type:** `boolean`<br>**Default:** <i>false</i>
 
 Deprecated, no longer needed, see css file for tunning or make your own custom css to prevent overwrite during pull
 |Option|Description|
@@ -42,7 +40,7 @@ Deprecated, no longer needed, see css file for tunning or make your own custom c
 |`fillColor` | the color of the area under the line
 |`maxPower` | the maximum number on the y axis
 |`rainText` | The text you want to display in front of the last time received in the last call
-| `nrOfTimeLabels` | optional value, adds a number of time labels under the graph, advised values: 2-5. If non existant or 0 reverts to default behaviour.
+|`nrOfTimeLabels` | optional value, adds a number of time labels under the graph.
 
 ## Example config.js content for this module
 		{
@@ -50,9 +48,8 @@ Deprecated, no longer needed, see css file for tunning or make your own custom c
 			position: "top_right",
                 	header: "Rain forecast",
 			config: {
-				lat: "52.37",
+				lat: "52.1",
 				lon: "4.90", 
-				noRainText: "Geen regen tot: ",
 			}
 		},
 ## Dutch Explanation of the Api and Source
