@@ -13,9 +13,9 @@ This module can show the rainforecast in your neighbourhood using longitude and 
 
 # Version
 
-|Vesion|Description|
+|Version|Description|
 |---|---|
-|`Version 2.0`|**Second version inspired by the svg work of spoturdeal with the SVG graph did a rewrite**<br>-module no longer depedended on external scripts<br>-deprecated of lot of config options, added a configurable css option, to enable all your custimization needs<br>-improved error handling<br>-refactoring code<br>-support for multiligual use<br>-experimental support for autohide; the hides the module completely when no rain is expected|
+|`Version 2.0`|**Second version inspired by the svg work of spoturdeal with the SVG graph. I did a rewrite**<br>-module no longer depedended on external scripts<br>-deprecated of lot of config options, added a configurable css option, to enable all your custimization needs<br>-improved error handling<br>-refactoring code<br>-support for multiligual use<br>-experimental support for autohide; the hides the module completely when no rain is expected|
 |`Version 1.0`| **first version was baded on jquery and sparkline**|
  
 
@@ -30,7 +30,8 @@ The following properties can be configured:
 |`refreshInterval`| (optional) Time to wait for refresh <br>**Type:** `number`<br>**Default:** <i>900000</i><br>**Remark:** Time to download new data in milisecond (15*60*1000)|
 |`autohide`| (expiremental) Completely hide the module (including header) when no rain is expected <br>**Type:** `boolean`<br>**Default:** <i>false</i>|
 
-Deprecated, no longer needed, see css file for tunning or make your own custom css to prevent overwrite during pull
+**Deprecated**
+No longer needed, see css file for tunning or make your own custom css to prevent overwrite during pull.
 |Option|Description|
 |---|---|
 |`width` | controls the size of the module|
