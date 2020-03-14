@@ -11,43 +11,24 @@ Module.register("MMM-rainfc",{
 
 	// Default module config.
 	defaults: {
-		updateInterval: 10 * 60 * 1000, // every 10 minutes
-		animationSpeed: 1000,
 		lang: config.language,
-
-		initialLoadDelay: 0, // 0 seconds delay
-
 		apiBase: "https://gpsgadget.buienradar.nl",
 		rainfcEndpoint: "data/raintext",
-
+		lat: 52,
+		lon: 5,
+		css: "MMM-rainfc.css",
 		refreshInterval: 1000 * 60, //refresh every minute
-		
-		width: 300,
-		height: 200,
-		lineWidth: 2,
-		showConsumption: false,
-		lineColor: "#e0ffe0",
-		fillColor: "#e0ffeo",
-
-		maxPower: 300,
-		oldData	: true,
-	},
-
-	// Define required scripts.
-	getScripts: function() {
-		return ["moment.js", "http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js", "jquery.sparkline.min.js"];
+		pleaseWait: "Please wait.",
+		autohide: true,
 	},
 
 	// Define required scripts.
 	getStyles: function() {
-		return ["MMM-rainfc.css"];
+		return [this.config.css];
 	},
 
 	// Define required translations.
 	getTranslations: function() {
-		// The translations for the default modules are defined in the core translation files.
-		// Therefor we can just return false. Otherwise we should have returned a dictionary.
-		// If you're trying to build your own module including translations, check out the documentation.
 		return false;
 	},
 
@@ -58,55 +39,69 @@ Module.register("MMM-rainfc",{
 		// Set locale.
 		moment.locale(config.language);
 
-		this.loaded = false;
 		this.sendSocketNotification('CONFIG', this.config);
 
 	},
 
-	// Override dom generator.
-	getDom: function() {
-		var wrapper = document.createElement("table");
-		wrapper.align = "center";
-		wrapper.style.cssText = "width: " + this.config.width + "px";
-		var max = this.config.nrOfTimeLabels ? this.config.nrOfTimeLabels : 0;
+ 	// Override dom generator.
+        getDom: function() {
+                var wrapper = document.createElement("div");
+                wrapper.align = "center";
+    		wrapper.id = "sparkler";
+                wrapper.className = "small thin light";
+                return wrapper;
+        },
 
-		if (max==0) {
-			var currentRow = document.createElement("tr");
-			var textrow = document.createElement("td");
-			textrow.className = "normal rfc_textrow";
-			textrow.setAttribute("colspan", max)
-			textrow.id = "textrow";
-			currentRow.appendChild(textrow);
-			wrapper.appendChild(currentRow);
-		}
+    	// Make the graphic using SVG
+    	makeSVG: function(raining,times){
+        	/* We start at position
+         	 * The table is upside down therefor we calculate the line position down from the top of the canvas
+         	 * received value 77 = 100 - 38 = 72 on the canvas
+         	 * M01,200 is the start
+         	 */
+        	//var setPoints='M01,100';
+        	var setPoints='M01 100 S ';
+        	// loop through the received data array raining[] normally 24 position 0 to 23
+        	var xAs=1;
+        	for (i=0;i<raining.length;i++){
+            		xAs = (xAs==1?xAs=2:xAs+13);
+            		//setPoints += ', L' + xAs + ',' + (100-raining[i]);
+            		setPoints +=  xAs + ',' + (100-raining[i]) + ' ';
+        	}
+        	// End of the line, make sure it drops to the bottom of the canvas to avoid silly fill
+        	setPoints +='L300,100 Z';
+        	//setPoints +=', L' + xAs + ',100 Z';
+        	
+		var svg='<svg class="graph" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">';
 
-		var graphRow = document.createElement("tr");
-		var graph = document.createElement("td");
-		graph.id = "sparkline";
-		graph.setAttribute("colspan", max)
-		graph.className = "small thin light";
-		graph.innerHTML = "No Data";
-		graphRow.appendChild(graph);
-		wrapper.appendChild(graphRow);
+		// smooth line will possibly draw below the y axis, clip everyting below the y axis
+		svg+='<defs> <clipPath id="cut-off-bottom"> <rect x="0" y="0" width="300" height="100" /> </clipPath> </defs>';
+        	//Set grid lines xAs ans yAs size is determined in CSS
+        	svg+='<g class="grid x-grid" id="xGrid"><line x1="1" x2="1" y1="00" y2="100"></line></g>';
+        	svg+='<g class="grid y-grid" id="yGrid"><line x1="1" x2="300" y1="100" y2="100"></line></g>';
+        	
+		//Draw the line with the data
+        	svg+='<g class="surfaces">';
+        	//svg+='<path class="first_set" style="fill:' + this.config.fillColor + '" d="' + setPoints + '" clip-path="url(#cut-off-bottom)"></path>';
+        	svg+='<path class="first_set" d="' + setPoints + '" clip-path="url(#cut-off-bottom)"></path>';
+        	svg+='</g>';
+        	
+		// Set the class for the grid
+        	svg+='<use class="grid double" xlink:href="#xGrid" style=""></use><use class="grid double" xlink:href="#yGrid" style=""></use>';
+        	
+		// Time labels
+        	svg+='<g class="labels x-labels">';
+        	svg+='<text x="20"  y="115" >' + times[0]  + '</text>';
+        	svg+='<text x="85"  y="115" >' + times[5]  + '</text>';
+        	svg+='<text x="150" y="115" >' + times[11]+ '</text>';
+        	svg+='<text x="215" y="115" >' + times[17] + '</text>';
+        	svg+='<text x="280" y="115" >' + times[raining.length-1] + '</text>';
+        	svg+='</g></svg>';
 
-		if (max>0) {
-			var botRow = document.createElement("tr");
-			for (i = 0; i < max; i++) {
-				var labelrow = document.createElement("td");
-				labelrow.className = "xsmall thin light rfc_labelrow";
-				labelrow.id = "labelrow"+i;
-				
-				if (i==0) { labelrow.setAttribute("align","left"); }
-				else if (i+1==max) { labelrow.setAttribute("align","right"); }
-				else { labelrow.setAttribute("align","center"); }
-				
-				botRow.appendChild(labelrow);
-			}
-			wrapper.appendChild(botRow);
-		}
+		Log.error(self.name + ": svg:" + svg);
+        	return svg;
+    	},
 
-		return wrapper;
-	},
 	
 	/* processRainfc(data)
 	 * Uses the received data to set the various values.
@@ -115,128 +110,73 @@ Module.register("MMM-rainfc",{
 	 */
 	processRainfc: function(data) {
 
-		if (!data ) {
-			// Did not receive usable new data.
-			// Maybe this needs a better check?
-			Log.error(self.name + ": Could not parse rain forecast, will retry");
-			return;
-		}
-		var lines = data.split("\n");
-		var numLines = lines.length-1; // always a empty line at the end
-
-		// This part to counter the unexected rain forecasts buienradar sends since nov 2018
-		// if the first value is not in a timewindow  currenttime +/- 15 minutes, ignore the update
-		// using old data is better than no data ;-)
-		oldData	= true;
-		var startTime   = moment().subtract(15, 'minutes');
-		var endTime     = moment().add(15, 'minutes');
-		var firstBrTime = lines[0].substring(lines[0].indexOf('|')+1 , lines[0].length);
-		var compareTime = moment(firstBrTime, "HH:mm");
-		if (!compareTime.isBetween(startTime, endTime)) {
-			Log.info(self.name + ": unexpected rain forecast:" + 
-				compareTime.format('HH:mm') +  " rain at " + moment().format('HH:mm'));
-			return;
-		}
-		oldData = false; //used to add an * in the displayed time to indicate old data
-		
-		
 		this.rain = 0; 
 		this.rains = []; 
 		this.times = []; 
 		
 		// parse phrases
+		var lines = data.split("\n");
+		var numLines = lines.length-1; // always a empty line at the end
 		for (i = 0; i < numLines; i++) {
   			var line = lines[i];
 			var pipeIndex = line.indexOf('|');
 			r = line.substring(0, pipeIndex);
 			t = line.substring(pipeIndex+1, line.length);
-			//Log.info(self.name + ": parse rain forecast:" + r +  " rain at " + t);
-			//Log.info(self.name + ": parse rain forecast:" + Math.pow(10, (parseInt(r)-109)/32) );
 			
 			this.rain = this.rain + parseInt(r); // if no rain expected dont show graph
-			//this.rains.push( parseInt(r)); // a value between 0-255
-			//Alternative for the 0-255 values
-			//Neerslagintensiteit = 10^((waarde-109)/32), rain forecast in mm/hr
-			this.rains.push( Math.pow(10, (parseInt(r)-109)/32));
+			this.rains.push( r=="NaN"?0:parseInt(parseInt(r)/2.55));
 			this.times.push( t );
+			Log.error(self.name + ": parse rain forecast:" + r +  " rain at " + t + " total forecast:" + this.rain);
 		}
-
-		this.loaded = true;
 	},
 
+       	socketNotificationReceived: function(notification, payload) {
 
-	socketNotificationReceived: function(notification, payload) {
+		spark = document.getElementById('sparkler');
+
+		// configured succesfully
     		if (notification === "STARTED") {
-			this.updateDom();
+			//$("#sparkler").html("Configured");
+			Log.error(self.name + ": geb: " + document.getElementById('sparkler'));
+			Log.error(self.name + ": rain forecast configured");
+			spark.innerHTML = "Configured";
+			//this.updateDom();
+			return;
 		}
-		else if (notification === "DATA") {
-			this.processRainfc(payload);
-			
-			var max = this.config.nrOfTimeLabels ? this.config.nrOfTimeLabels : 0;
-			
-			if (!this.times || this.times.length == 0) {
-				$("#sparkline").html("No Data");
-				$("#textrow").html("");
-				for (i = 0; i < max; i++) {
-					$("#labelrow"+i).html("");
-				}
-	
+       		// error received from node_helper.js
+       		if (notification === "ERROR") {
+			Log.error(self.name + ": rain forecast error: " + payload);
+			spark.innerHTML = payload;
+       	   		return;
+       		}
+       		if (notification === "DATA") {
+       			// no data received from node_helper.js
+			if (!payload || payload ==="") {
+				error = "No data received, will retry";
+				Log.error(self.name + ": " + error);
+				spark.innerHTML = error;
 				return;
 			}
+			this.processRainfc(payload);
+       	 		// no rain calculated from in node_helper.js
+       	 		if (this.rain == 0) {
+				Log.error(self.name + ": rain forecast no error");
+				noRainText = this.config.noRainText ?
+					     this.config.noRainText : 
+					     "No rain untill: ";
+				noRainText += this.times[this.times.length-1] ;
+				spark.innerHTML = noRainText;
 
-
-			if (this.rain == 0) {
-				// if no rain expected, hide the graph
-				$("#sparkline").html("");
-				
-				noRainText = this.config.noRainText ? this.config.noRainText : "No rain untill: ";
-				noRainText = noRainText + this.times[this.times.length-1] ;
-				noRainText = noRainText + (oldData?"*":"");
-						
-				if (max>0) {
-					$("#textrow").html("");
-					$("#labelrow"+(max-1)).html( noRainText);
-					for (i = 0; i < max-1; i++) {
-						$("#labelrow"+i).html("");
-					}
-				} else {
-					$("#textrow").html(noRainText);
-					for (i = 0; i < max; i++) {
-						$("#labelrow"+i).html("");
-					}
-				}
-			} else {
-
-				$("#sparkline").sparkline(
-					this.rains, {
-						type: 'line',
-						width: this.config.width,
-						height: this.config.height,
-						lineColor: this.config.lineColor,
-						fillColor: this.config.fillColor,
-						spotColor: false,
-						minSpotColor: false,
-						maxSpotColor: false,
-						lineWidth: this.config.lineWidth,
-						chartRangeMin: 0,
-						chartRangeMax: this.config.maxPower,
-					});
-				
-				// show line for how long the rain forecast lasts or the labels beneath the graph
-				if (max>0) {
-					interval = Math.floor(this.times.length / (max-1));
-					for (i = 0; i < max; i++) {
-						if (i==0) { $("#labelrow0").html( this.times[0]+(oldData?"*":"")); }
-						else if (i+1==max) { $("#labelrow"+i).html( this.times[this.times.length-1]); }
-						else { $("#labelrow"+i).html( this.times[i*interval]); }
-					}
-				} else {
-					rainText = this.config.rainText ? this.config.rainText : "Forecast untill: ";
-					$("#textrow").html(rainText + this.times[this.times.length-1]+(oldData?"*":""));
-				}
+				// experimental: option to completly hide the module if no rain is expected
+				if (this.config.autohide) this.hide();
+       	 		} else {
+				Log.error(self.name + ": rain forecast drawing");
+				spark.innerHTML = this.makeSVG(this.rains,this.times);
+				// experimental: option to completly hide the module if no rain is expected:
+				// show it again  when an update comes in with rain
+				if (this.config.autohide) this.show();
 			}
-		}
-	} 	
-
+       	 	}
+    	},
 
 });
