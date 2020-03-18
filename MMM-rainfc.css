@@ -12,7 +12,7 @@
 }
 
 .MMM-rainfc svg.graph .grid {
-  stroke: #e0ffe0;
+  stroke: #e0e0e0;
   //stroke-dasharray: 1 2;
   stroke-width: 1;
 }
@@ -22,7 +22,7 @@
   stroke-width: 3;
 }
 .MMM-rainfc svg.graph .first_set {
-  fill: #e0ffe0;
+  fill: #e0e0e0;
 }
 
 .MMM-rainfc svg.graph .surfaces {
@@ -41,7 +41,7 @@
 
 .MMM-rainfc svg.graph .labels.x-labels {
   text-anchor: middle;
-  fill: #e0ffe0;
+  fill: #e0e0e0;
 }
 
 .MMM-rainfc svg.graph .labels.y-labels {
