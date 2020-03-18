@@ -44,7 +44,7 @@ Module.register("MMM-rainfc",{
                 var wrapper = document.createElement("div");
     		wrapper.id = "sparkler";
 		wrapper.innerHTML = this.translate("STARTING");
-                wrapper.className = "small dimmed light rfc_text";
+                wrapper.className = "small light rfc_text";
                 return wrapper;
         },
 
