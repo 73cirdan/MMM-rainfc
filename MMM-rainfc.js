@@ -37,6 +37,10 @@ Module.register("MMM-rainfc",{
 	start: function() {
 		Log.info("Starting module: " + this.name);
 		this.sendSocketNotification('CONFIG', this.config);
+        	if (!["line", "smooth", "block"].includes(this.config.displaymode)) {
+			Log.error(self.name + ": invalid or no displaymode in config, valid values are: line, smooth or block");
+			this.confg.displaymode = "smooth";
+		}
 	},
 
  	// Override dom generator.
@@ -51,15 +55,9 @@ Module.register("MMM-rainfc",{
     	// Make the graphic using SVG
     	makeSVG: function(raining,times){
          	/* The table is upside down therefor we calculate the line position down from the top of the canvas
-         	 * received value 77 = 100 - 77 = 23 on the canvas, M01,100 is the start
+         	 * received value 33 =>  100 - 33  = 67 on the canvas, M01,100 is the start
          	 */
-        	var setPoints='M1,100 S ';
-        	// loop through the received data array raining[] normally 24 position 0 to 23
-        	for (i=0,xAs=1;i<raining.length;i++,xAs+=13){
-            		setPoints +=  xAs + ',' + (100-raining[i]) + ' ';
-        	}
-        	// End of the line, make sure it drops to the bottom of the canvas to avoid silly fill
-        	setPoints +='L300,100 Z';
+        	var setPoints = this.config.displaymode=="block"? this.makeBlockSVG(raining) : this.makeSmoothOrLineSVG(raining);
         	
 		var svg='<svg class="graph" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">';
 
@@ -86,11 +84,41 @@ Module.register("MMM-rainfc",{
         	svg+='<text x="280" y="115" >' + times[raining.length-1] + '</text>';
         	svg+='</g></svg>';
 
-		Log.error(self.name + ": svg:" + svg);
+		// TODO: format : expected rain in mm at the max position of the graph
+		// Neerslagintensiteit = 10^((waarde-109)/32)
+		// this yields a possible value from 0-70000 mm/hr
+		// mm = Math.pow(10, (r-109)/32);
+
+		//Log.error(self.name + ": svg:" + svg);
         	return svg;
     	},
-
+    	
+	// Make the line or smooth graphic using SVG
+    	makeSmoothOrLineSVG: function(raining){
+        	
+		var setPoints='M1,100 ' + 
+			       (this.config.displaymode=="line"?'L ':'S ');
+        	// loop through the received data array raining[] normally 24 position 0 to 23
+        	for (i=0,xAs=1;i<raining.length;i++,xAs+=13){
+            		setPoints +=  xAs + ',' + (100-raining[i]) + ' ';
+        	}
+        	setPoints += 'L300,100 Z';
+		return setPoints;
+	},
 	
+	// Make the block graphic using SVG
+    	makeBlockSVG: function(raining){
+        	
+		var setPoints='M1,100 L ';
+        	// loop through the received data array raining[] normally 24 position 0 to 23
+        	for (i=0,xAs=1;i<raining.length;i++,xAs+=13){
+            		setPoints +=  xAs + ',' + (100-raining[i]) + ' ';
+            		setPoints +=  (xAs+12) + ',' + (100-raining[i]) + ' ';
+        	}
+        	setPoints += 'L300,100 Z';
+		return setPoints;
+	},
+
 	/* processRainfc(data)
 	 * Uses the received data to set the various values.
 	 *
@@ -98,7 +126,7 @@ Module.register("MMM-rainfc",{
 	 */
 	processRainfc: function(data) {
 
-		this.rain = 0; 
+		this.totalrain = 0; 
 		this.rains = []; 
 		this.times = []; 
 		
@@ -108,13 +136,16 @@ Module.register("MMM-rainfc",{
 		for (i = 0; i < numLines; i++) {
   			var line = lines[i];
 			var pipeIndex = line.indexOf('|');
-			r = line.substring(0, pipeIndex);
+			r = parseInt(line.substring(0, pipeIndex));
 			t = line.substring(pipeIndex+1, line.length);
 			
-			this.rain = this.rain + parseInt(r); // if no rain expected dont show graph
+ 			// calculated totalrain (if no rain expected don't show graph)
+			this.totalrain +=  r;
+			
 			this.rains.push( r=="NaN"?0:parseInt(parseInt(r)/2.55));
+			this.rains.push( mm );
 			this.times.push( t );
-			//Log.info(self.name + ": parse rain forecast:" + r +  " rain at " + t + " total forecast:" + this.rain);
+			//Log.error(self.name + ": parse rain forecast:" + r + "/" + mm +  " rain at " + t + " total forecast:" + this.totalrain);
 		}
 	},
 
@@ -150,7 +181,7 @@ Module.register("MMM-rainfc",{
 			}
 			this.processRainfc(payload);
        	 		// no rain calculated from procesRainfc
-       	 		if (this.rain == 0) {
+       	 		if (this.totalrain == 0) {
 				Log.info(self.name + ": no rain expected");
 				noRainText = this.translate("NORAIN")
 					   + this.times[this.times.length-1] ;
