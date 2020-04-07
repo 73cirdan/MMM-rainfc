@@ -139,13 +139,10 @@ Module.register("MMM-rainfc",{
 			r = parseInt(line.substring(0, pipeIndex));
 			t = line.substring(pipeIndex+1, line.length);
 			
- 			// calculated totalrain (if no rain expected don't show graph)
+ 			// calculate totalrain (if no rain expected don't show graph)
 			this.totalrain +=  r;
-			
-			this.rains.push( r=="NaN"?0:parseInt(parseInt(r)/2.55));
-			this.rains.push( mm );
+			this.rains.push( r / 2.55 );
 			this.times.push( t );
-			//Log.error(self.name + ": parse rain forecast:" + r + "/" + mm +  " rain at " + t + " total forecast:" + this.totalrain);
 		}
 	},
 

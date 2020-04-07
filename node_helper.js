@@ -26,7 +26,7 @@ module.exports = NodeHelper.create({
 		var self = this;
 		
 		var rainfcUrl = this.config.apiBase + "/" + this.config.rainfcEndpoint + "?lat=" + this.config.lat + "&lon="+ this.config.lon;
-		console.log(self.name + ": loading rain forecast for : " + rainfcUrl);
+		//console.log(self.name + ": loading rain forecast for : " + rainfcUrl);
 				
 		request({
 			url: rainfcUrl,
