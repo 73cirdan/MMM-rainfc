@@ -26,10 +26,9 @@ The following properties can be configured:
 |---|---|
 |`lat`| The latitude of your position.<br>**Type:** `Float`<br>**Default:** <i>52.0</i>|
 |`lon`| The longitude of your position.<br>**Type:** `Float`<br>**Default:** <i>5.0</i>|
+|`displaymode`|  there are three display modes, see the screen shot, in order from top to bottom smooth, line or block. <br>**Type:** `string` <br>**Default:**<i> smooth<i>|
 |`css`| (optional) The file to use when changing the look (alignment, font, color) of the module<br>**Type:** `string`<br>**Default:** <i>MMM-rainfc.css</i>|
 |`refreshInterval`| (optional) Time to wait for refresh <br>**Type:** `number`<br>**Default:** <i>900000</i><br>**Remark:** Time to download new data in milisecond (15*60*1000)|
-|`displaymode`|  there are three display modes, see the screen shot, in order from top to bottom smooth, line or block. <br>**Type:** `string` <br>**Default:**<i>smooth<i>|
-(expiremental) Completely hide the module (including header) when no rain is expected <br>**Type:** `boolean`<br>**Default:** <i>false</i>|
 |`autohide`| (expiremental) Completely hide the module (including header) when no rain is expected <br>**Type:** `boolean`<br>**Default:** <i>false</i>|
 
 **Deprecated**
