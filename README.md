@@ -15,7 +15,7 @@ This module can show the rainforecast in your neighbourhood using longitude and 
 
 |Version|Description|
 |---|---|
-|`Version 2.0`|**Second version inspired by the svg work of spoturdeal with the SVG graph. I did a rewrite**<br>-module no longer depedended on external scripts<br>-deprecated of lot of config options, added a configurable css option, to enable all your custimization needs<br>-improved error handling<br>-refactoring code<br>-support for multiligual use<br>-experimental support for autohide; this hides the module completely when no rain is expected|
+|`Version 2.0`|**Second version inspired by the svg work of spoturdeal with the SVG graph. I did a rewrite**<br>-module no longer depedending on external scripts<br>-deprecated of lot of config options, added a configurable css option, to enable all your custimization needs<br>-improved error handling<br>-refactoring code<br>-support for multiligual use<br>-experimental support for autohide; this hides the module completely when no rain is expected<br>multiple display modes|
 |`Version 1.0`| **first version was baded on jquery and sparkline**|
  
 
