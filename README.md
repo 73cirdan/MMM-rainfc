@@ -53,6 +53,7 @@ No longer needed, see css file for tunning or make your own custom css to preven
 			config: {
 				lat: "52.1",
 				lon: "4.90", 
+				displaymode: "smooth",
 			}
 		},
 ## Dutch Explanation of the Api and Source
