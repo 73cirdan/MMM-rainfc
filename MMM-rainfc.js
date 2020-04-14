@@ -30,6 +30,7 @@ Module.register("MMM-rainfc",{
        		return {
             		en: "translations/en.json",
             		nl: "translations/nl.json",
+			de: "translations/de.json",
         	};
 	},
 
@@ -82,13 +83,12 @@ Module.register("MMM-rainfc",{
         	svg+='<text x="150" y="115" >' + times[11] + '</text>';
         	svg+='<text x="215" y="115" >' + times[17] + '</text>';
         	svg+='<text x="280" y="115" >' + times[raining.length-1] + '</text>';
-        	svg+='</g></svg>';
-
-		// TODO: format : expected rain in mm at the max position of the graph
-		// Neerslagintensiteit = 10^((waarde-109)/32)
-		// this yields a possible value from 0-70000 mm/hr
-		// mm = Math.pow(10, (r-109)/32);
-
+		
+		// Show max. rain in that timeframe
+		Log.info(this.maxrain);
+		svg+='<text x="150" y="10" >max. ' + this.maxrain + ' mm/h</text>';
+		svg+='</g></svg>';
+		
 		//Log.error(self.name + ": svg:" + svg);
         	return svg;
     	},
@@ -126,7 +126,8 @@ Module.register("MMM-rainfc",{
 	 */
 	processRainfc: function(data) {
 
-		this.totalrain = 0; 
+		this.totalrain = 0;
+		this.maxrain=0; 
 		this.rains = []; 
 		this.times = []; 
 		
@@ -141,8 +142,21 @@ Module.register("MMM-rainfc",{
 			
  			// calculate totalrain (if no rain expected don't show graph)
 			this.totalrain +=  r;
+
+			// determine maximum amount of rain
+			if (r > this.maxrain) {
+				this.maxrain = r;
+				Log.info("r = " + r);
+			}
+			
 			this.rains.push( r / 2.55 );
 			this.times.push( t );
+		}
+
+		// calculate rain in mm/h and round to 2 digits
+		if (this.maxrain > 0) {
+			this.maxrain = Math.round(Math.pow(10, (this.maxrain-109)/32) * 100) / 100;
+			Log.info("maxrain = " + this.maxrain);	
 		}
 	},
 
