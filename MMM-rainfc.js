@@ -18,6 +18,7 @@ Module.register("MMM-rainfc",{
 		css: "MMM-rainfc.css",
 		refreshInterval: 1000 * 60 * 15, //refresh every 15 minutes
 		autohide: false,
+		displaymode: "smooth"
 	},
 
 	// Define required scripts.
