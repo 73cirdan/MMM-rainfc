@@ -87,7 +87,8 @@ Module.register("MMM-rainfc",{
 		
 		// Show max. rain in that timeframe
 		Log.info(this.maxrain);
-		svg+='<text x="150" y="10" >max. ' + this.maxrain + ' mm/h</text>';
+		svg+='<text x="150" y="10" >' + this.translate("MAX") 
+                   + ' ' + this.maxrain + ' ' + this.translate("AMOUNT") + '</text>';
 		svg+='</g></svg>';
 		
 		//Log.error(self.name + ": svg:" + svg);
@@ -195,7 +196,7 @@ Module.register("MMM-rainfc",{
        	 		// no rain calculated from procesRainfc
        	 		if (this.totalrain == 0) {
 				Log.info(self.name + ": no rain expected");
-				noRainText = this.translate("NORAIN")
+				noRainText = this.translate("NORAIN") + ' ' 
 					   + this.times[this.times.length-1] ;
 				spark.innerHTML = noRainText;
 

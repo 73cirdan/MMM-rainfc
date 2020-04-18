@@ -3,5 +3,7 @@
     "STARTED": "Started",
     "NODATA": "No data received",
     "ERROR": "No connection",
-    "NORAIN": "No rain until: "
+    "NORAIN": "No rain until",
+    "MAX": "Max",
+    "AMOUNT": "mm/h"
 }

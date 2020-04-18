@@ -3,5 +3,7 @@
     "STARTED": "Klaar met opstarten",
     "NODATA": "Geen gegevens ontvangen",
     "ERROR": "Geen verbinding",
-    "NORAIN": "Geen regen tot: "
+    "NORAIN": "Geen regen tot",
+    "MAX": "Max",
+    "AMOUNT": "mm/u"
 }
