@@ -18,7 +18,8 @@ Module.register("MMM-rainfc",{
 		css: "MMM-rainfc.css",
 		refreshInterval: 1000 * 60 * 15, //refresh every 15 minutes
 		autohide: false,
-		displaymode: "smooth"
+		displaymode: "smooth",
+		faultToleration: 5,
 	},
 
 	// Define required scripts.
@@ -38,20 +39,30 @@ Module.register("MMM-rainfc",{
 	// Define start sequence.
 	start: function() {
 		Log.info("Starting module: " + this.name);
+                this.nodatacount = 0;
 		this.sendSocketNotification('CONFIG', this.config);
         	if (!["line", "smooth", "block"].includes(this.config.displaymode)) {
-			Log.error(self.name + ": invalid or no displaymode in config, valid values are: line, smooth or block");
+			Log.warn(this.name + ": invalid or no displaymode in config, valid values are: line, smooth or block");
 			this.confg.displaymode = "smooth";
 		}
 	},
 
  	// Override dom generator.
         getDom: function() {
-                var wrapper = document.createElement("div");
-    		wrapper.id = "sparkler";
-		wrapper.innerHTML = this.translate("STARTING");
-                wrapper.className = "small light rfc_text";
+		var wrapper = document.getElementById('sparkler');
+		if (!wrapper) {
+                   wrapper = document.createElement("div");
+    		   wrapper.id = "sparkler";
+		   wrapper.innerHTML = this.translate("STARTING");
+                   wrapper.className = "small light rfc_text";
+		}
                 return wrapper;
+        },
+
+        // use the header to inform the user about stale data
+        getHeader: function() 
+        {
+	        return this.data.header + (this.nodatacount>0?' (' + this.nodatacount + ')':'');
         },
 
     	// Make the graphic using SVG
@@ -86,12 +97,12 @@ Module.register("MMM-rainfc",{
         	svg+='<text x="280" y="115" >' + times[raining.length-1] + '</text>';
 		
 		// Show max. rain in that timeframe
-		Log.info(this.maxrain);
+		//Log.info(this.maxrain);
 		svg+='<text x="150" y="10" >' + this.translate("MAX") 
                    + ' ' + this.maxrain + ' ' + this.translate("AMOUNT") + '</text>';
 		svg+='</g></svg>';
 		
-		//Log.error(self.name + ": svg:" + svg);
+		//Log.error(this.name + ": svg:" + svg);
         	return svg;
     	},
     	
@@ -148,7 +159,7 @@ Module.register("MMM-rainfc",{
 			// determine maximum amount of rain
 			if (r > this.maxrain) {
 				this.maxrain = r;
-				Log.info("r = " + r);
+				//Log.info("r = " + r);
 			}
 			
 			this.rains.push( r / 2.55 );
@@ -158,7 +169,7 @@ Module.register("MMM-rainfc",{
 		// calculate rain in mm/h and round to 2 digits
 		if (this.maxrain > 0) {
 			this.maxrain = Math.round(Math.pow(10, (this.maxrain-109)/32) * 100) / 100;
-			Log.info("maxrain = " + this.maxrain);	
+			//Log.info("maxrain = " + this.maxrain);	
 		}
 	},
 
@@ -174,42 +185,51 @@ Module.register("MMM-rainfc",{
 
 		// configured succesfully
     		if (notification === "STARTED") {
-			Log.info(self.name + ": rain forecast configured");
+			Log.info(this.name + ": rain forecast configured");
 			spark.innerHTML = this.translate("STARTED");
-			return;
-		}
+		} else 
        		// error received from node_helper.js
        		if (notification === "ERROR") {
-			Log.error(self.name + ": rain forecast error: " + payload);
+			Log.error(this.name + ": rain forecast error: " + payload);
 			spark.innerHTML = this.translate("ERROR");
-       	   		return;
-       		}
+       		} else
+		// data received
        		if (notification === "DATA") {
-       			// no data received from node_helper.js
+       			// data received from node_helper.jsm but empty payload (api calls return empty string sometimes)
 			if (!payload || payload ==="") {
+                                this.nodatacount++;
 				nodata = this.translate("NODATA");
-				Log.warn(self.name + ": " + nodata);
-				spark.innerHTML = nodata;
-				return;
-			}
-			this.processRainfc(payload);
-       	 		// no rain calculated from procesRainfc
-       	 		if (this.totalrain == 0) {
-				Log.info(self.name + ": no rain expected");
-				noRainText = this.translate("NORAIN") + ' ' 
-					   + this.times[this.times.length-1] ;
-				spark.innerHTML = noRainText;
-
-				// experimental: option to completly hide the module if no rain is expected
-				if (this.config.autohide) this.hide();
-       	 		} else {
-				Log.info(self.name + ": rain expected");
-				spark.innerHTML = this.makeSVG(this.rains,this.times);
-				// experimental: option to completly hide the module if no rain is expected:
-				// show it again  when an update comes in with rain
-				if (this.config.autohide) this.show();
+				Log.warn(this.name + ": " + nodata);
+				if (this.nodatacount < this.config.faultToleration) {
+                                        // leave the graph, old data is better than an errormessage, 
+                                        // show nr of failed calls betweeen brackets in header (see getHeader())
+                                } else {
+				        spark.innerHTML = nodata;
+                                }
+			} else 
+			// data received and payload to parse
+			{
+                        	this.nodatacount=0; // reset counter
+				this.processRainfc(payload);
+       	 			// no rain calculated from procesRainfc
+       	 			if (this.totalrain == 0) {
+					Log.info(this.name + ": no rain expected");
+					noRainText = this.translate("NORAIN") + ' ' 
+					   	+ this.times[this.times.length-1] ;
+					spark.innerHTML = noRainText;
+	
+					// experimental: option to completly hide the module if no rain is expected
+					if (this.config.autohide) this.hide();
+       	 			} else {
+					Log.info(this.name + ": rain expected");
+					spark.innerHTML = this.makeSVG(this.rains,this.times);
+					// experimental: option to completly hide the module if no rain is expected:
+					// show it again  when an update comes in with rain
+					if (this.config.autohide) this.show();
+				}
 			}
        	 	}
+                this.updateDom();
     	},
 
 });

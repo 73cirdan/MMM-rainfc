@@ -42,6 +42,9 @@ module.exports = NodeHelper.create({
 			//console.log(self.name + ": rain forecast data: " + body);
 			
 			if (!error && response.statusCode == 200) {
+				if (!body || body=="") console.log(self.name + body + response.headers);
+				//self.mayhem--;
+				//if (self.mayhem<0 && self.mayhem>-5) { body=null };
 				self.sendSocketNotification("DATA", body);
 			} else {
 				error = "No forecast connection, will retry";
@@ -61,6 +64,7 @@ module.exports = NodeHelper.create({
 			self.getData();
 			self.started = true;
 			console.log(self.name + ": configured");
+			//self.mayhem=2;
 		}
 	}
 });
