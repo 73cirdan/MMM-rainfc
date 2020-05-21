@@ -15,7 +15,7 @@ This module can show the rainforecast in your neighbourhood using longitude and 
 
 |Version|Description|
 |---|---|
-|`Version 2.0`|**Second version inspired by the svg work of spoturdeal with the SVG graph. I did a rewrite**<br>-module no longer depedending on external scripts<br>-deprecated of lot of config options, added a configurable css option, to enable all your custimization needs<br>-improved error handling<br>-refactoring code<br>-support for multiligual use<br>-experimental support for autohide; this hides the module completely when no rain is expected<br>- multiple display modes|
+|`Version 2.0`|**Second version inspired by the svg work of spoturdeal with the SVG graph. I did a rewrite**<br>-module no longer depedending on external scripts<br>-deprecated of lot of config options, added a configurable css option, to enable all your custimization needs<br>-improved error handling<br>-refactoring code<br>-support for multiligual use<br>-experimental support for autohide; this hides the module completely when no rain is expected<br>- multiple display modes<br>-fault toleration|
 |`Version 1.0`| **first version was baded on jquery and sparkline**|
  
 
@@ -29,6 +29,7 @@ The following properties can be configured:
 |`displaymode`|  There are three display modes, see the screen shot, in order from top to bottom <i>smooth</i>, <i>block</i> or <i>line</i>. <br>**Type:** `string` <br>**Default:**<i> smooth<i>|
 |`css`| (optional) The file to use when changing the look (alignment, font, color) of the module<br>**Type:** `string`<br>**Default:** <i>MMM-rainfc.css</i>|
 |`refreshInterval`| (optional) Time to wait for refresh <br>**Type:** `number`<br>**Default:** <i>900000</i><br>**Remark:** Time to download new data in milisecond (15*60*1000)|
+|`faultToleration`| (optional) Number of 'no responses' from the buienradar server you accept before an error is shown instead of the grapg/no rain text <br>**Type:** `number`<br>**Default:** <i>5</i><br>**Remark:** Remark, if the header shows e.g. (2) behind the title, 2 attempts failed and the data shown is somewhat stale.|
 |`autohide`| (expiremental) Completely hide the module (including header) when no rain is expected <br>**Type:** `boolean`<br>**Default:** <i>false</i>|
 
 **Deprecated**
