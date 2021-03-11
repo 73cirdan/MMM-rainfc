@@ -171,6 +171,14 @@ Module.register("MMM-rainfc",{
 			this.maxrain = Math.round(Math.pow(10, (this.maxrain-109)/32) * 100) / 100;
 			//Log.info("maxrain = " + this.maxrain);	
 		}
+
+		// issue12
+		// sometimes the api returns not for 2 hours of data, but a susbset. We complete the set to 2 hours
+		// there should be 24 entries, times is used to indicate the incompleteness of the answer, by using a #
+		for (i = this.rains.length; i < 24; i++) {
+			this.rains.push( 0 );
+			this.times.push( '#' );
+		}
 	},
 
 	/* socketNotificationReceive(notification)
@@ -195,7 +203,7 @@ Module.register("MMM-rainfc",{
        		} else
 		// data received
        		if (notification === "DATA") {
-       			// data received from node_helper.jsm but empty payload (api calls return empty string sometimes)
+       			// data received from node_helper.js, but empty payload (api calls return empty string sometimes)
 			if (!payload || payload ==="") {
                                 this.nodatacount++;
 				nodata = this.translate("NODATA");
