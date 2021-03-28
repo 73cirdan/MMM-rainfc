@@ -4,7 +4,7 @@
  * Module: MMM-rainfc
  * Displays a graph of expected rain for a lon/lat pair based on a Dutch public Api (Buienradar)
  *
- * By Cirdan.
+ * By Cirdan
  */
 
 Module.register("MMM-rainfc",{
