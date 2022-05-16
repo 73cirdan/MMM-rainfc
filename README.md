@@ -7,9 +7,15 @@ Based on a Dutch public api for rain forecast (BuienRadar).
 
 # Installation
 Navigate into your MagicMirror's `modules` folder and execute
- 'git clone https://github.com/73cirdan/MMM-rainfc'
-After that go into the MMM-rainfc folder and excute
- 'npm install'
+
+
+`git clone https://github.com/73cirdan/MMM-rainfc`
+
+
+After that go into the `MMM-rainfc` folder and excute
+
+
+`npm install`
  
 # Using the module
 This module can show the rainforecast in your neighbourhood using longitude and latitude.
@@ -18,6 +24,7 @@ This module can show the rainforecast in your neighbourhood using longitude and 
 
 |Version|Description|
 |---|---|
+|`Version 2.1.1`|**bugfix**<br>added package.json in order te counter missing `request` module (issue15)|
 |`Version 2.1`|**bugfix**<br>handle incomplete delivery of data by the api (issue12)|
 |`Version 2.0`|**Second version inspired by the svg work of spoturdeal with the SVG graph. I did a rewrite**<br>-module no longer depedending on external scripts<br>-deprecated of lot of config options, added a configurable css option, to enable all your custimization needs<br>-improved error handling<br>-refactoring code<br>-support for multiligual use<br>-experimental support for autohide; this hides the module completely when no rain is expected<br>- multiple display modes<br>-fault toleration|
 |`Version 1.0`| **first version was based on jquery and sparkline**|
