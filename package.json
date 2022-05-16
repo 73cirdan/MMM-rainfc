@@ -1,0 +1,24 @@
+{
+  "name": "MMM-rainfc",
+  "version": "2.1",
+  "description": "A module for MagicMirror which shows the rainforecast in The Netherlands and some parts of it neighbours.",
+  "main": "MMM-rainfc.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/73cirdan/MMM-rainfc.git"
+  },
+  "keywords": [
+    "MagicMirror",
+    "Rain",
+    "Forecast"
+  ],
+  "author": "Cirdan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/73cirdan/MMM-rainfc/issues"
+  },
+  "homepage": "https://github.com/73cirdan/MMM-rainfc#readme",
+  "dependencies": {
+    "request": "^2.88.0"
+  }
+}
