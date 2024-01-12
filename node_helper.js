@@ -26,7 +26,6 @@ module.exports = NodeHelper.create({
 		
 		var rainfcUrl =  this.config.apiBase + "/" + this.config.rainfcEndpoint + "?lat=" + this.config.lat + "&lon="+ this.config.lon;
 		console.log(self.name + ": loading rain forecast for : " + rainfcUrl);
-				
 		
 		axios.get(rainfcUrl)
   			.then(function (response) {
@@ -58,6 +57,9 @@ module.exports = NodeHelper.create({
 		var self = this;
 		if (notification === 'CONFIG' && self.started == false) {
 			self.config = payload;
+			if (self.config.axiosfix && self.config.axiosfix!="") { 
+				axios.defaults.headers.common['User-Agent'] = self.config.axiosfix; 
+			} // issue 20
 			self.sendSocketNotification("STARTED", true);
 			self.getData();
 			self.started = true;
