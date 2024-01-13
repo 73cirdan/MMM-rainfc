@@ -1,6 +1,6 @@
 {
   "name": "MMM-rainfc",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "A module for MagicMirror which shows the rainforecast in The Netherlands and some parts of it neighbours.",
   "main": "MMM-rainfc.js",
   "repository": {
@@ -19,6 +19,6 @@
   },
   "homepage": "https://github.com/73cirdan/MMM-rainfc#readme",
   "dependencies": {
-    "axios": "^0.27.1"
+    "axios": ">=1.6.0"
   }
 }
