@@ -24,6 +24,7 @@ This module can show the rainforecast in your neighbourhood using longitude and 
 
 |Version|Description|
 |---|---|
+|`Version 2.2.1`|**bufix**<br>added an optional config option for users with a Axios get error (issue20) |
 |`Version 2.2.0`|**merge**<br>replaced `request` module with `axios` module|
 |`Version 2.1.1`|**bugfix**<br>added package.json in order to counter missing `request` module (issue15)|
 |`Version 2.1`|**bugfix**<br>handle incomplete delivery of data by the api (issue12)|
@@ -43,6 +44,7 @@ The following properties can be configured:
 |`refreshInterval`| (optional) Time to wait for refresh <br>**Type:** `number`<br>**Default:** <i>900000</i><br>**Remark:** Time to download new data in milisecond (15*60*1000)|
 |`faultToleration`| (optional) Number of 'no responses' from the buienradar server you accept before an error is shown instead of the grapg/no rain text <br>**Type:** `number`<br>**Default:** <i>5</i><br>**Remark:** Remark, if the header shows e.g. (2) behind the title, 2 attempts failed and the data shown is somewhat stale.|
 |`autohide`| (expiremental) Completely hide the module (including header) when no rain is expected <br>**Type:** `boolean`<br>**Default:** <i>false</i>|
+|`axiosfix`| fixes issue 20, set to "PostmanRuntime/7.26.2"<br>**Type** `String`<br>**Default:**<i>Do not use, if there is no problem</i>|,
 
 **Deprecated**
 No longer needed, see css file for tunning or make your own custom css to prevent overwrite during pull.
